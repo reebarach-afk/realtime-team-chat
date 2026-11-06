@@ -82,7 +82,14 @@ if os.getenv("REDIS_HOST"):
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
             "CONFIG": {
-                "hosts": [(os.getenv("REDIS_HOST"), int(os.getenv("REDIS_PORT", 6379)))],
+                "hosts": [
+                    {
+                        "address": f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT', '6379')}",
+                        "socket_keepalive": True,
+                        "health_check_interval": 30,
+                        "socket_timeout": 30,
+                    }
+                ],
             },
         }
     }
