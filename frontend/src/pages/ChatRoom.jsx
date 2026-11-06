@@ -43,6 +43,7 @@ export default function ChatRoom() {
         // Any authenticated call refreshes an expired token before we connect
         await api.get("/auth/me/");
       } catch {
+        if (!closed) retryTimer = setTimeout(connect, 3000);
         return;
       }
       if (closed) return;

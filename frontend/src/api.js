@@ -18,9 +18,10 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config;
     const refresh = localStorage.getItem("refresh");
-    const isAuthCall = original?.url?.startsWith("/auth/");
-
-    if (error.response?.status === 401 && refresh && !original._retry && !isAuthCall) {
+    const skipRefresh = ["/auth/login/", "/auth/register/", "/auth/refresh/"].some(
+      (p) => original?.url?.startsWith(p)
+    );
+    if (error.response?.status === 401 && refresh && !original._retry && !skipRefresh) {
       original._retry = true;
       try {
         const { data } = await axios.post(`${API_URL}/api/auth/refresh/`, { refresh });
