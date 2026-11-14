@@ -2,6 +2,8 @@
 
 A full-stack real-time chat application where messages appear instantly for everyone in a room, with no page refresh. Built with **Django Channels (WebSockets)**, **React**, **Redis** and **PostgreSQL**, with **JWT authentication**, **role-based rooms** (admin / member) and a one-command **Docker Compose** setup.
 
+**Live demo:** http://3.110.122.10 (hosted on AWS EC2, so it may be taken down at any time. It runs over plain HTTP, so use a throwaway password.)
+
 ## Screenshots
 
 **Live chat between two users (normal window + incognito window)**
@@ -167,3 +169,12 @@ realtime-team-chat/
 ## Author
 
 **Reeba Rachel Jogi**: [GitHub](https://github.com/reebarach-afk)
+
+## Production Deployment (AWS EC2)
+
+`docker-compose.prod.yml` builds the React app and serves it with Nginx, which also proxies `/api/` and `/ws/` (WebSocket) to the Django backend. On a server:
+
+```bash
+cp .env.example .env    # set a strong DB_PASSWORD and SECRET_KEY, DEBUG=0, and your ALLOWED_HOSTS / CORS_ALLOWED_ORIGINS
+docker compose -f docker-compose.prod.yml up -d --build
+```
